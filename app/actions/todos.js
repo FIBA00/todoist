@@ -6,7 +6,7 @@
 "use server";
 
 import { TodoService } from "@/services/todoService.js";
-import { prisma } from "@/lib/db.js";
+import { prisma } from "@/lib/db";
 
 // TEMP:
 async function getCurrentUser() {

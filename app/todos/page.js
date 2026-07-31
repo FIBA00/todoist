@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import {
   getTodos,
@@ -17,16 +18,15 @@ export default function TodosPage() {
   const [todoStats, setTodoStats] = useState(null); // state can be any thing
   const [loadingTodos, setLoadingTodos] = useState(true); // boolean
   const [todosError, setTodosError] = useState(""); // string only
-  useEffect(LoadTodos(), []);
-
-  function LoadTodos() {
+  useEffect(() => {
     load();
-  }
+  }, []);
 
   async function load() {
     try {
       setLoadingTodos(true);
       setTodosError("");
+
       const todosResult = await getTodos();
       if (todosResult.success) {
         setTodos(todosResult.data);
@@ -39,13 +39,13 @@ export default function TodosPage() {
       setLoadingTodos(false);
     } catch (error) {
       console.error("Error occurred while loading todos data, ", error);
-      setTodosError(error.message);
+      // setTodosError(error.message);
     }
   }
 
   async function handleCreateTodo(formData) {
     try {
-      const result = await createTodo(formdata);
+      const result = await createTodo(formData);
       if (result.success) {
         await load();
       } else {
@@ -75,13 +75,15 @@ export default function TodosPage() {
       alert(`Error occurred: ${error.message}`);
     }
   }
-  if (loadingTodos) return <p>Loading Todos....</p>;
+  if (loadingTodos) return <p>Loading todos....</p>;
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">My TODOS</h1>
 
-      <div className="flex flex-row">{stats && <Stats stats={stats} />}</div>
+      <div className="flex flex-row">
+        {todoStats && <Stats stats={todoStats} />}
+      </div>
       {/* components */}
       <TodoForm onSubmit={handleCreateTodo} />
       <TodoList
